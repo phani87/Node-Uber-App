@@ -5,7 +5,7 @@ const UberRUSH = require('uber-rush');
 var PORT = process.env.PORT || 8080;
 
 
-
+//setup uber-rush client with client_secret, client_id
 const UberRUSHClient = UberRUSH.createClient({
     client_secret: 'tpfmHr20Q2PNYsYyghHsl5x-eHRKDm2NCJXf8EY-',
     client_id: 'x12ZWFymkcThH2NkgkPxWQt3Sv4mPpNk',
@@ -54,6 +54,8 @@ var delivery = UberRUSHClient.createDelivery({
     }
 });
 
+//get all quotes for a location
+
 app.get('/api/getAQ', function(request, response) {
 var allQs = '';
 delivery.quote()
@@ -70,6 +72,7 @@ delivery.quote()
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+//post with best quote to the uber rush
 app.post('/api/confirmQ', function(request, response) {
     console.log('<<Confirm Delivery>>')
     var q_id = request.body.quote; 
@@ -79,6 +82,7 @@ app.post('/api/confirmQ', function(request, response) {
     response.json(delivery.delivery_id);
 });
 
+//get status of the delivery
 app.get('/api/getStatus', function(request, response) {
     const d_id = request.params.d_id; 
     delivery.updateDeliveryInfo();
@@ -86,6 +90,7 @@ app.get('/api/getStatus', function(request, response) {
     
 });
 
+//manully update the status for the delivery
 app.get('/api/updateStatus', function(request, response) {
     const d_id = request.params.d_id; 
     delivery.updateStatus('en_route_to_pickup');
