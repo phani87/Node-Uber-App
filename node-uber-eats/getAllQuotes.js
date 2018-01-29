@@ -1,7 +1,7 @@
 var getSession = require('./getSession.js');
 
 
-function getAllQuotes(request, response) {
+function getAllQuotes(request, response, next) {
   console.log("getAllQuotes");
   // try get session
   var uber = getSession(request, response);

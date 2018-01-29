@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+var parseurl = require('parseurl')
 var Uber = require('node-uber');
 var url = require('url');
 var nue = require('./node-uber-eats/index.js');
@@ -19,17 +20,25 @@ var PORT = process.env.PORT || 8080;
 //   sandbox: true, // optional, defaults to false
 //   proxy: '' // optional, defaults to none
 // });
+//
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({ secret: 'keyboard cat' }))
+// app.use(session({
+//   secret: 'keyboard cat',
+//   resave: false,
+//   saveUninitialized: true
+// }))
 
-app.use(function(request, response, next) {
-  // console.log(request);
-  next();
-})
+// app.use(function (req, res, next) {
+//
+//   var pathname = parseurl(req).pathname
+//
+//   console.log(pathname)
+//
+// })
 
-app.get('/api/getAllQuotes',(something, somethingelse) => nue.getAllQuotes);
+app.get('/api/login',(something, somethingelse) => nue.getAQ);
 
 app.get('/api/login/*', (something, somethingelse) => nue.login);
 
