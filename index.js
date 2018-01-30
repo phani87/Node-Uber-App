@@ -7,8 +7,8 @@ var PORT = process.env.PORT || 8080;
 
 //setup uber-rush client with client_secret, client_id
 const UberRUSHClient = UberRUSH.createClient({
-    client_secret: '<CLIENT_SECRET>',
-    client_id: '<CLIENT_ID>',
+    client_secret: 'tpfmHr20Q2PNYsYyghHsl5x-eHRKDm2NCJXf8EY-',
+    client_id: 'x12ZWFymkcThH2NkgkPxWQt3Sv4mPpNk',
     sandbox: true,
     simulate : false
 });
@@ -79,10 +79,19 @@ app.get('/api/confirmQ/:q_id', function(request, response) {
     //var q_id = request.body.quote; 
     console.log("Quote ID "+q_id);
     delivery.confirm({quote_id: q_id}).then(function(deliveries){
-        console.log(deliveries.delivery_id);
-        response.json(delivery.delivery_id);
+        
+        var json_response = '{deliver_id : '+deliveries.delivery_id +
+        ',delivery_eta : '+deliveries.dropoff.eta +
+        ',pickup_eta : '+deliveries.pickup.eta +
+        ',fee : '+deliveries.fee +
+        '}';
+        console.log("Delivery ID "+deliveries.delivery_id);
+        console.log("Delivery ETA :" +deliveries.dropoff.eta);
+        console.log("Pickup ETA :" +deliveries.pickup.eta);
+        console.log("Pickup ETA :" +deliveries.fee);
+        response.json(json_response);
     });
-    console.log("Delivery ID "+delivery.delivery_id);
+    
     //response.json(delivery.delivery_id);
 });
 
@@ -110,9 +119,9 @@ app.get('/api/updateStatus/:status', function(request, response) {
  
   app.listen(PORT, function(err) {
 	if(err) {
-		console.log("errr", err);
+		console.log("Unable to launch app on the port" + PORT, err);
 	}
 
-	console.log("on port" + PORT);
+	console.log("Running App on port" + PORT);
 })
 
