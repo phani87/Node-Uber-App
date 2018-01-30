@@ -73,29 +73,36 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 //post with best quote to the uber rush
-app.post('/api/confirmQ', function(request, response) {
+app.get('/api/confirmQ/:q_id', function(request, response) {
     console.log('<<Confirm Delivery>>')
-    var q_id = request.body.quote; 
+    var q_id = request.params.q_id; 
+    //var q_id = request.body.quote; 
     console.log("Quote ID "+q_id);
-    delivery.confirm({quote_id: q_id});
+    delivery.confirm({quote_id: q_id}).then(function(deliveries){
+        console.log(deliveries.delivery_id);
+        response.json(delivery.delivery_id);
+    });
     console.log("Delivery ID "+delivery.delivery_id);
-    response.json(delivery.delivery_id);
+    //response.json(delivery.delivery_id);
 });
 
 //get status of the delivery
 app.get('/api/getStatus', function(request, response) {
     const d_id = request.params.d_id; 
-    delivery.updateDeliveryInfo();
-    response.json(delivery.status);
-    
+    // delivery.updateDeliveryInfo();
+    // console.log(delivery.status);
+    // response.json(delivery.status);
+    delivery.updateDeliveryInfo().then(function(status){
+        console.log(delivery.status);
+        response.json(delivery.status);
+    });
 });
 
 //manully update the status for the delivery
-app.get('/api/updateStatus', function(request, response) {
-    const d_id = request.params.d_id; 
-    delivery.updateStatus('en_route_to_pickup');
-    response.json(delivery.status);
-    
+app.get('/api/updateStatus/:status', function(request, response) {
+    var status = request.params.status; 
+    console.log(status);
+    response.json(delivery.updateStatus(status));
 });
 
 
