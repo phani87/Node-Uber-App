@@ -7,8 +7,8 @@ var PORT = process.env.PORT || 8080;
 
 //setup uber-rush client with client_secret, client_id
 const UberRUSHClient = UberRUSH.createClient({
-    client_secret: 'tpfmHr20Q2PNYsYyghHsl5x-eHRKDm2NCJXf8EY-',
-    client_id: 'x12ZWFymkcThH2NkgkPxWQt3Sv4mPpNk',
+    client_secret: '<CLIENT_SECRET>',
+    client_id: '<CLIENT_ID>',
     sandbox: true,
     simulate : false
 });
