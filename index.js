@@ -13,50 +13,57 @@ const UberRUSHClient = UberRUSH.createClient({
     simulate : false
 });
 
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-var delivery = UberRUSHClient.createDelivery({
-    item: {
-        title: 'Pizza Delivery',
-        quantity: 1,
-        is_fragile: true
-    },
-    pickup: {
-        contact: {
-            first_name: 'Phani',
-            last_name: 'Turlapati',
-            phone: {
-              number: "+12356981236"
-            }
-        },
-        location: {
-            address: '1900 Oracle Way',
-            city: 'Reston',
-            state: 'VA',
-            postal_code: '20190',
-            country: 'US'
-        }
-    },
-    dropoff: {
-        contact: {
-            first_name: 'Oracle PPL',
-            last_name: 'PPs',
-            phone: {
-              number: "+15896541236"
-            }
-        },
-        location: {
-            address: '1910 Oracle Way',
-            city: 'Reson',
-            state: 'VA',
-            postal_code: '20190',
-            country: 'US'
-        }
-    }
-});
 
-//get all quotes for a location
+//get all quotes for a location 
+// post request with the payload : 
+// {
+// 	"item": {
+// 		"title": "Pizza Delivery",
+// 		"quantity": "1",
+// 		"is_fragile": "true"
+// 	},
+// 	"pickup": {
+// 		"contact": {
+// 			"first_name": "Phani",
+// 			"last_name": "Turlapati",
+// 			"phone": {
+// 				"number": "+12356981236"
+// 			}
+// 		},
+// 		"location": {
+// 			"address": "1900 Oracle Way",
+// 			"city": "Reston",
+// 			"state": "VA",
+// 			"postal_code": "20190",
+// 			"country": "US"
+// 		}
+// 	},
+// 	"dropoff": {
+// 		"contact": {
+// 			"first_name": "Oracle PPL",
+// 			"last_name": "PPs",
+// 			"phone": {
+// 				"number": "+15896541236"
+// 			}
+// 		},
+// 		"location": {
+// 			"address": "1910 Oracle Way",
+// 			"city": "Reson",
+// 			"state": "VA",
+// 			"postal_code": "20190",
+// 			"country": "US"
+// 		}
+// 	}
+// }
 
-app.get('/api/getAQ', function(request, response) {
+app.post('/api/getAQ', function(request, response) {
+
+    var uber_delivery = request.body;
+    console.log(uber_delivery);
+    var delivery = UberRUSHClient.createDelivery(uber_delivery);
 var allQs = '';
 delivery.quote()
 .then(function(quotes) {
@@ -69,8 +76,6 @@ delivery.quote()
 });
 });
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
 
 //post with best quote to the uber rush
 app.get('/api/confirmQ/:q_id', function(request, response) {
@@ -86,9 +91,9 @@ app.get('/api/confirmQ/:q_id', function(request, response) {
         ',fee : '+deliveries.fee +
         '}';
         console.log("Delivery ID "+deliveries.delivery_id);
-        console.log("Delivery ETA :" +deliveries.dropoff.eta);
-        console.log("Pickup ETA :" +deliveries.pickup.eta);
-        console.log("Pickup ETA :" +deliveries.fee);
+        console.log("Delivery ETA :" +deliveries.dropoff);
+        console.log("Pickup ETA :" +deliveries.pickup);
+        console.log("Pickup Fee :" +deliveries.fee);
         response.json(json_response);
     });
     
@@ -98,9 +103,6 @@ app.get('/api/confirmQ/:q_id', function(request, response) {
 //get status of the delivery
 app.get('/api/getStatus', function(request, response) {
     const d_id = request.params.d_id; 
-    // delivery.updateDeliveryInfo();
-    // console.log(delivery.status);
-    // response.json(delivery.status);
     delivery.updateDeliveryInfo().then(function(status){
         console.log(delivery.status);
         response.json(delivery.status);
@@ -111,7 +113,7 @@ app.get('/api/getStatus', function(request, response) {
 app.get('/api/updateStatus/:status', function(request, response) {
     var status = request.params.status; 
     console.log(status);
-    response.json(delivery.updateStatus(status));
+    delivery.updateStatus(status);
 });
 
 
