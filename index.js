@@ -103,15 +103,14 @@ app.get('/api/confirmQ/:q_id', function (request, response) {
 app.get('/api/getStatus/:delivery_id', function (request, response) {
     const d_id = request.params.delivery_id;
     var delivery = UberRUSHClient.createDelivery(uber_delivery);
-    var resp = delivery.updateDeliveryInfo1(d_id).then(function (result){
+    delivery.updateDeliveryInfo1(d_id).then(function (result){
         console.log(result);
         response.json(result);
-    });
+    }).catch(err => {
+        // Increment the number of polling failures on failure
+        response.json(err);
+      });
    
-    // delivery.updateDeliveryInfo1(d_id).then(function (status) {
-    //     console.log(delivery.status);
-    //     response.json(delivery);
-    // });
 });
 
 //manully update the status for the delivery
