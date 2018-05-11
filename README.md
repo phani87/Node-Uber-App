@@ -6,7 +6,7 @@ This is a node based Uber App built on Uber-Sandbox environment to deliver from 
 
 Uber provides Authentication and Rest API's which are available as methods in the Node Uber Wrapper. Leveraged those methods to create 
 an application that would be available as REST APIs to create a delivery and check status during the entire delivery process. 
-The code is written in <img src=static/download.png height=25 />
+The code is written in <img src=static/nodejs.png height=25 />
 
 
 ## Uber Support Libraries
